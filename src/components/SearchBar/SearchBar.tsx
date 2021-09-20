@@ -1,20 +1,20 @@
 import React from "react";
-import { TextField } from "@mui/material";
+import { TextField, FormControl } from "@mui/material";
 
 
 
-const SearchBar = ({ searchVideoByInput} : any) => {
-
+const SearchBar = ({ searchVideoByInput, searchString }: any) => {
 
     return (<React.Fragment>
-        <TextField
-            label="Search by artist or title"
-            type="search"
-            variant="filled"
-            fullWidth
-            id="fullWidth"
-            onKeyUp={(e) => searchVideoByInput(e)}
-        />
+        <FormControl fullWidth>
+            <TextField
+                label="Search by artist or title"
+                fullWidth
+                id="fullWidth"
+                value={searchString}
+                onChange={(e) => searchVideoByInput(e)}
+            />
+        </FormControl>
     </React.Fragment>);
 
 };

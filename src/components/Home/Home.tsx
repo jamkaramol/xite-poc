@@ -3,22 +3,29 @@ import Filters from '../Filter/Filters';
 import SearchBar from '../SearchBar/SearchBar';
 import useVideos from "../../hooks/useVideos";
 import VideoList from '../VideoList/VideoList';
-import { Container } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import './Home.css';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const Home = () => {
 
     const { videoListToDisplay,
         genreList,
         setSearchStringToState,
+        searchString,
         yearList,
         setSelectedYearToState,
-        selectedYear } = useVideos();
+        selectedYear,
+        selectedGenre,
+        setSelectedGenreToState,
+        clearFilters,
+        isLoading } = useVideos();
 
     const searchVideos = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchStringToState(event.target.value);
     };
-
 
     const onYearSelectHandler = (event: any) => {
         setSelectedYearToState(String(event.target.value));
@@ -26,17 +33,37 @@ const Home = () => {
 
     return <React.Fragment>
         <Container >
-            <h1>Welcome to home page</h1>
+            <h1 className="home__heading">Video Search Engine</h1>
+            <Grid
+                container
+                direction="row"
+                justifyContent="space-between"
+                alignItems="flex-start"
+            >
+                <i className="btn-green home_search-result"> {searchString.length ? `About ${videoListToDisplay.length} results` : ''}</i>
+                <Button onClick={() => clearFilters()} className="btn-floating right" style={{ float: "right" }} variant="text">Clear </Button>
+            </Grid>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <SearchBar searchVideoByInput={searchVideos} />
+                    <SearchBar searchVideoByInput={searchVideos} searchString={searchString} />
                 </Grid>
                 <Grid item xs={12}>
-                    <Filters yearList={yearList} onYearSelect={onYearSelectHandler} selectedYear={selectedYear} genreList={genreList} />
+                    <Filters
+                        yearList={yearList}
+                        onYearSelect={onYearSelectHandler}
+                        selectedYear={selectedYear}
+                        genreList={genreList}
+                        selectedGenre={selectedGenre}
+                        setSelectedGenreToState={setSelectedGenreToState}
+                    />
                 </Grid>
 
                 <Grid item xs={12}>
-                    <VideoList allVideos={videoListToDisplay} />
+                    {isLoading && <Box sx={{ display: 'flex' }}>
+                        <CircularProgress />
+                    </Box>}
+                    {isLoading && "Loading your favorite videos, please wait"}
+                    {!isLoading && <VideoList allVideos={videoListToDisplay} />}
                 </Grid>
             </Grid>
         </Container>

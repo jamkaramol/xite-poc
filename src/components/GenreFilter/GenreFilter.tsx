@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 
 import { Genre } from "../../types/allTypes";
-import { eventNames } from 'process';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -21,9 +20,8 @@ const MenuProps = {
     },
 };
 
-const GenreFilter = ({ genreList }: any) => {
-    const [selectedGenre, setSelectedGenres] = useState<number[]>([]);
-
+const GenreFilter = ({ genreList, selectedGenre, setSelectedGenreToState }: any) => {
+    
     const getGenreDetails = (idToCompare: number) => {
         const list = genreList.filter((genre: any) => genre.id === Number(idToCompare));
         return list.length ? list[0]?.name : "Unknown";
@@ -33,24 +31,20 @@ const GenreFilter = ({ genreList }: any) => {
         let {
             target: { value },
         } = event;
-        if (value.length < selectedGenre.length) {
-            return setSelectedGenres(value);
-        }
-        const allGenres: number[] = Array.from(new Set([...selectedGenre, ...value]));
-        setSelectedGenres(allGenres);
+        setSelectedGenreToState(value);
     };
 
     return (
         <div>
             <FormControl fullWidth>
-                <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+                <InputLabel id="demo-multiple-chip-label">Genre</InputLabel>
                 <Select
                     labelId="demo-multiple-chip-label"
                     id="demo-multiple-chip"
                     multiple
                     value={selectedGenre}
                     onChange={handleChange}
-                    input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                    input={<OutlinedInput id="select-multiple-chip" label="Genre" />}
                     renderValue={(selected) => (
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                             {selected.map((id: any) => (
@@ -60,12 +54,12 @@ const GenreFilter = ({ genreList }: any) => {
                     )}
                     MenuProps={MenuProps}
                 >
-                    {genreList.length && genreList.map((genre: Genre) => (
+                    {genreList.length && genreList.map(({name, id}: Genre) => (
                         <MenuItem
-                            key={genre.name}
-                            value={genre.id}
+                            key={name}
+                            value={id}
                         >
-                            {genre.name}
+                            {name}
                         </MenuItem>
                     ))}
                 </Select>

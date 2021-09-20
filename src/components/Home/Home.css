@@ -1,0 +1,27 @@
+.home {
+
+}
+
+.home__heading{
+    text-align: center;
+}
+
+.home_search-result {
+    color: green;
+}
+
+
+@media screen and (max-width: 430px){
+
+    .home__heading {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 320px){
+
+    .home__heading {
+        font-size: 18px;
+    }
+    
+}
