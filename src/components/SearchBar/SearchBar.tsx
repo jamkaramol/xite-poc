@@ -1,9 +1,12 @@
 import React from "react";
 import { TextField, FormControl } from "@mui/material";
 
+type SearchBarType = {
+    searchVideoByInput: (searchString: string) => void,
+    searchString: string
+}
 
-
-const SearchBar = ({ searchVideoByInput, searchString }: any) => {
+const SearchBar = ({ searchVideoByInput, searchString }: SearchBarType) => {
 
     return (<React.Fragment>
         <FormControl fullWidth>
@@ -12,7 +15,7 @@ const SearchBar = ({ searchVideoByInput, searchString }: any) => {
                 fullWidth
                 id="fullWidth"
                 value={searchString}
-                onChange={(e) => searchVideoByInput(e)}
+                onChange={(e) => searchVideoByInput(e.target.value)}
             />
         </FormControl>
     </React.Fragment>);

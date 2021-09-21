@@ -5,7 +5,11 @@ import Grid from "@mui/material/Grid";
 
 export const NO_RESULTS_MESSAGE = "No result found, try with something else";
 
-const VideoList = ({ allVideos }: any) => {
+type VideoListType = {
+    allVideos: Video[]
+};
+
+const VideoList = ({ allVideos }: VideoListType): JSX.Element => {
 
     const loopCards = allVideos.map((videoDetails: Video) => {
         return <VideoDetailsCard key={videoDetails.id} details={videoDetails} />;

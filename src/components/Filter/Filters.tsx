@@ -2,12 +2,22 @@ import React from "react";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import Select, { SelectChangeEvent} from '@mui/material/Select';
 import { Grid } from "@mui/material";
 import GenreFilter from "../GenreFilter/GenreFilter";
+import { Genre } from "../../types/allTypes";
 
 
-const Filters = ({ yearList, onYearSelect, selectedYear, genreList, selectedGenre, setSelectedGenreToState }: any) => {
+type FiltersType = {
+    yearList: number[] | string[], 
+    onYearSelect: (event: SelectChangeEvent<string>) => void, 
+    selectedYear: string, 
+    genreList: Genre[], 
+    selectedGenre: number[], 
+    setSelectedGenreToState: (list: number[]) => void
+}
+
+const Filters = ({ yearList, onYearSelect, selectedYear, genreList, selectedGenre, setSelectedGenreToState }: FiltersType): JSX.Element => {
 
     return <React.Fragment>
 
@@ -30,7 +40,7 @@ const Filters = ({ yearList, onYearSelect, selectedYear, genreList, selectedGenr
                         onChange={onYearSelect}
                     >
                         <MenuItem key="default" value=""></MenuItem>
-                        {yearList.length !== 0 && yearList.map((year: number) => <MenuItem key={year} value={year}>{year}</MenuItem>)}
+                        {yearList.length !== 0 && yearList.map((year: number | string) => <MenuItem key={year} value={year}>{year}</MenuItem>)}
                     </Select>
                 </FormControl>
             </Grid>

@@ -7,7 +7,7 @@ import './VideoDetails.css';
 
 const VideoDetailsCard = ({ details }: any) => {
 
-    const { id, title, artist, image_url } = details;
+    const { id, title, artist, image_url, release_year } = details;
 
     return (
         <Card sx={{ maxWidth: 214, margin: 1 }} key={id} className="video-details-card">
@@ -21,8 +21,11 @@ const VideoDetailsCard = ({ details }: any) => {
                 <Typography gutterBottom variant="h6" component="div" className="video-details-card__artist">
                     {artist}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" className="video-details-card__title">
+                <Typography variant="body1" color="text.secondary" className="video-details-card__title">
                     {title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" className="video-details-card__title">
+                    ({release_year}) 
                 </Typography>
             </CardContent>
         </Card>

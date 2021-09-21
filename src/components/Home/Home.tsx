@@ -9,7 +9,7 @@ import './Home.css';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
-const Home = () => {
+const Home = (): JSX.Element => {
 
     const { videoListToDisplay,
         genreList,
@@ -23,8 +23,8 @@ const Home = () => {
         clearFilters,
         isLoading } = useVideos();
 
-    const searchVideos = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchStringToState(event.target.value);
+    const searchVideos = (searchStringValue: string) => {
+        setSearchStringToState(searchStringValue);
     };
 
     const onYearSelectHandler = (event: any) => {
@@ -40,7 +40,7 @@ const Home = () => {
                 justifyContent="space-between"
                 alignItems="flex-start"
             >
-                <i className="btn-green home_search-result"> {searchString.length ? `About ${videoListToDisplay.length} results` : ''}</i>
+                <i className="btn-green home_search-result"> {searchString.length || selectedGenre.length || selectedYear  ? `About ${videoListToDisplay.length} records` : ''}</i>
                 <Button onClick={() => clearFilters()} className="btn-floating right" style={{ float: "right" }} variant="text">Clear </Button>
             </Grid>
             <Grid container spacing={2}>

@@ -20,9 +20,16 @@ const MenuProps = {
     },
 };
 
-const GenreFilter = ({ genreList, selectedGenre, setSelectedGenreToState }: any) => {
-    
-    const getGenreDetails = (idToCompare: number) => {
+type GenreFilterType = {
+    genreList: Genre[],
+    selectedGenre: number[],
+    setSelectedGenreToState: (list: number[]) => void
+}
+
+
+const GenreFilter = ({ genreList, selectedGenre, setSelectedGenreToState }: GenreFilterType): JSX.Element => {
+
+    const getGenreDetails = (idToCompare: number): string => {
         const list = genreList.filter((genre: any) => genre.id === Number(idToCompare));
         return list.length ? list[0]?.name : "Unknown";
     };
@@ -54,7 +61,7 @@ const GenreFilter = ({ genreList, selectedGenre, setSelectedGenreToState }: any)
                     )}
                     MenuProps={MenuProps}
                 >
-                    {genreList.length && genreList.map(({name, id}: Genre) => (
+                    {genreList.length && genreList.map(({ name, id }: Genre) => (
                         <MenuItem
                             key={name}
                             value={id}

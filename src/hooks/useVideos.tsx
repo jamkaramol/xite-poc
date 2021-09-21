@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-// import { response } from './responseMock';
 import { Video, Genre, ResponseDataSet } from '../types/allTypes';
 
 const URL = 'https://raw.githubusercontent.com/XiteTV/frontend-coding-exercise/main/data/dataset.json';
@@ -41,7 +40,7 @@ const useVideos = (): UseVideo => {
         setYearList(sortedList);
     };
 
-    const setVideoListToSet = (list: Video[]): void => {
+    const setVideoListToState = (list: Video[]): void => {
         setVideoListToDisplay(list);
     };
 
@@ -50,17 +49,17 @@ const useVideos = (): UseVideo => {
         fetch(URL)
             .then((response) => response.json())
             .then((response) => {
-        const { videos, genres }: ResponseDataSet = response;
-        setVideoListToSet(videos);
-        setGenre(genres);
-        getAllYears(videos);
-        setVideos(videos);
-        setSearchString("");
-        setSelectedYear("");
-        setLoading(false);
-        }).catch(() => {
-            setLoading(false);
-        });
+                const { videos = [], genres = [] }: ResponseDataSet = response;
+                setVideoListToState(videos);
+                setGenre(genres);
+                getAllYears(videos);
+                setVideos(videos);
+                setSearchString("");
+                setSelectedYear("");
+                setLoading(false);
+            }).catch(() => {
+                setLoading(false);
+            });
     }, []);
 
 
@@ -78,7 +77,7 @@ const useVideos = (): UseVideo => {
         return videoList.filter(({ genre_id }) => selectedGenre.includes(genre_id));
     };
 
-    const allVideoOfSelectedGenre = useCallback(filterByGenre, [selectedGenre]);
+    const selectedGenreVideos = useCallback(filterByGenre, [selectedGenre]);
 
     const filterBySearchString = (): Video[] => {
         return videoList
@@ -89,35 +88,16 @@ const useVideos = (): UseVideo => {
 
     useEffect(() => {
         let finalResult: Video[] = [];
-        if (searchString) {
-            finalResult = searchedVideos;
-            if (selectedYear) {
-                finalResult = releaseYearVideos(finalResult);
-            }
-            if (selectedGenre.length) {
-                finalResult = allVideoOfSelectedGenre(finalResult);
-            }
-            setVideoListToSet(finalResult);
-        } else {
-            setVideoListToSet(videoList);
-        }
-
-    }, [videoList, searchString, selectedYear, selectedGenre, searchedVideos, allVideoOfSelectedGenre, releaseYearVideos])
+        finalResult = searchString ? searchedVideos : videoList;
+        finalResult = selectedYear ? releaseYearVideos(finalResult) : finalResult;
+        finalResult = selectedGenre.length ? selectedGenreVideos(finalResult) : finalResult;
+        setVideoListToState(finalResult);
+    }, [videoList, searchString, selectedYear, selectedGenre, searchedVideos, selectedGenreVideos, releaseYearVideos])
 
 
-    const setSearchStringToStateNew = (text: string) => {
-        let timeoutId: any;
+    const setSearchStringToState = (text: string) => {
         setSearchString(text);
-        return function () {
-            if (timeoutId) {
-                clearInterval(timeoutId)
-            } else {
-                timeoutId = setTimeout(() => setSearchString(text), 100);
-            }
-        }
     }
-
-    const setSearchStringToState = useCallback(setSearchStringToStateNew, []);
 
     const setSelectedGenreToState = (goners: number[]): void => {
         setSelectedGenre(goners);
