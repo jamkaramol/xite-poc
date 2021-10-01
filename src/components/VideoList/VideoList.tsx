@@ -10,12 +10,13 @@ export const NO_RESULTS_MESSAGE = "No result found, try with something else";
 const COUNT_PER_PAGE = 10;
 
 type VideoListType = {
-    allVideos: Video[]
+    allVideos: Video[],
+    page: number,
+    setPage: (page: number) => void
 };
 
-const VideoList = ({ allVideos }: VideoListType): JSX.Element => {
+const VideoList = ({ allVideos, page, setPage }: VideoListType): JSX.Element => {
 
-    const [page, setPage] = useState(1);
     const [loopCards, setLoopCards] = useState<Video[]>([]);
 
     const multi = (count: number) => {

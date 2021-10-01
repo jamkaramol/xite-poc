@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useMemo, useState } from "react";
-import { Video, Genre, ResponseDataSet } from '../types/allTypes';
+import { Video } from '../types/allTypes';
 
 
 type UseSearch = {
@@ -10,9 +10,11 @@ type UseSearch = {
 };
 
 
-const useSearch = ({ videoList, searchString, selectedYear, selectedGenre }: UseSearch): { videoListToDisplay: Video[] } => {
+const useSearch = ({ videoList, searchString, selectedYear, selectedGenre }: UseSearch): { videoListToDisplay: Video[], page: number, setPage: (page: number) => void } => {
 
     const [videoListToDisplay, setVideoListToDisplay] = useState<Video[]>([]);
+    const [page, setPage] = useState(1);
+    
 
     const filterByReleaseYear = (videoList: Video[]) => {
         return videoList.filter(({ release_year }) => release_year === Number(selectedYear))
@@ -34,18 +36,19 @@ const useSearch = ({ videoList, searchString, selectedYear, selectedGenre }: Use
     const searchedVideos = useMemo(filterBySearchString, [searchString, videoList]);
 
     const searchVideos = useCallback(() => {
+        setPage(1);
         let finalResult: Video[] = [];
         finalResult = searchString ? searchedVideos : videoList;
         finalResult = selectedYear ? releaseYearVideos(finalResult) : finalResult;
         finalResult = selectedGenre.length ? selectedGenreVideos(finalResult) : finalResult;
         setVideoListToDisplay(finalResult);
-    }, [searchString, selectedYear, selectedGenre])
+    }, [videoList, searchString, selectedYear, selectedGenre, releaseYearVideos, searchedVideos, selectedGenreVideos])
 
     useEffect(() => {
         searchVideos();
-    }, [videoList, searchString, selectedYear, selectedGenre, searchedVideos, selectedGenreVideos, releaseYearVideos])
+    }, [videoList, searchString, selectedYear, selectedGenre, searchedVideos, selectedGenreVideos, releaseYearVideos, searchVideos])
 
-    return { videoListToDisplay };
+    return { videoListToDisplay, page, setPage };
 
 };
 

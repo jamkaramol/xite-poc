@@ -25,7 +25,7 @@ const Home = (): JSX.Element => {
         clearFilters,
         isLoading } = useVideos();
 
-    const { videoListToDisplay } = useSearch({ videoList, searchString, selectedYear, selectedGenre });
+    const { videoListToDisplay, page, setPage } = useSearch({ videoList, searchString, selectedYear, selectedGenre });
 
     const searchVideos = useCallback((searchStringValue: string) => {
         setSearchStringToState(searchStringValue);
@@ -67,7 +67,7 @@ const Home = (): JSX.Element => {
                         <CircularProgress />
                     </Box>}
                     {isLoading && "Loading your favorite videos, please wait"}
-                    {!isLoading && <VideoList allVideos={videoListToDisplay} />}
+                    {!isLoading && <VideoList allVideos={videoListToDisplay} page={page} setPage={setPage} />}
                 </Grid>
             </Grid>
         </Container>
