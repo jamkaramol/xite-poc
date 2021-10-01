@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Filters from '../Filter/Filters';
 import SearchBar from '../SearchBar/SearchBar';
 import useVideos from "../../hooks/useVideos";
@@ -8,10 +8,12 @@ import Grid from "@mui/material/Grid";
 import './Home.css';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import useSearch from "../../hooks/useSearch";
 
 const Home = (): JSX.Element => {
 
-    const { videoListToDisplay,
+    const {
+        videoList,
         genreList,
         setSearchStringToState,
         searchString,
@@ -23,13 +25,15 @@ const Home = (): JSX.Element => {
         clearFilters,
         isLoading } = useVideos();
 
-    const searchVideos = (searchStringValue: string) => {
-        setSearchStringToState(searchStringValue);
-    };
+    const { videoListToDisplay } = useSearch({ videoList, searchString, selectedYear, selectedGenre });
 
-    const onYearSelectHandler = (event: any) => {
+    const searchVideos = useCallback((searchStringValue: string) => {
+        setSearchStringToState(searchStringValue);
+    }, [setSearchStringToState]);
+
+    const onYearSelectHandler = useCallback((event: any) => {
         setSelectedYearToState(String(event.target.value));
-    };
+    }, [setSelectedYearToState]);
 
     return <React.Fragment>
         <Container >
@@ -40,7 +44,7 @@ const Home = (): JSX.Element => {
                 justifyContent="space-between"
                 alignItems="flex-start"
             >
-                <i className="btn-green home_search-result"> {searchString.length || selectedGenre.length || selectedYear  ? `About ${videoListToDisplay.length} records` : ''}</i>
+                <i className="btn-green home_search-result"> {searchString.length || selectedGenre.length || selectedYear ? `About ${videoListToDisplay.length} records` : ''}</i>
                 <Button onClick={() => clearFilters()} className="btn-floating right" style={{ float: "right" }} variant="text">Clear </Button>
             </Grid>
             <Grid container spacing={2}>
